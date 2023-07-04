@@ -21,7 +21,7 @@ from abc import ABC
 from abc import abstractmethod
 
 from tokenizers import Tokenizer
-from transformers import GPT2Tokenizer, GPT2TokenizerFast
+from transformers import GPT2Tokenizer, GPT2TokenizerFast, T5Tokenizer
 import numpy as np
 import sentencepiece as spm
 from typing import List, Union
@@ -50,6 +50,12 @@ def build_tokenizer(args):
                 "WARNING: No vocab file found, loading Huggingface's pretrained GPT2Tokenizer"
             )
         tokenizer = HFGPT2Tokenizer(args.vocab_file)
+    elif args.tokenizer_type.lower() == "HFT5Tokenizer".lower():
+        if args.vocab_file is None:
+            print(
+                "WARNING: No vocab file found, loading Huggingface's pretrained T5Tokenizer"
+            )
+        tokenizer = HFT5Tokenizer(args.vocab_file)
     elif args.tokenizer_type.lower() == "CharLevelTokenizer".lower():
         tokenizer = CharLevelTokenizer(vocab_size=512)
     elif args.tokenizer_type.lower() == "TiktokenTokenizer".lower():
@@ -303,6 +309,44 @@ class HFGPT2Tokenizer(AbstractTokenizer):
     def eod(self):
         return self.eod_id
 
+class HFT5Tokenizer(AbstractTokenizer):
+    """Designed to Integrate the pretrained OpenAI GPT2 Tokenizers from HF"""
+
+    def __init__(self, vocab_file=None, fast=True):
+        name = "HFT5Tokenizer"
+        super().__init__(name)
+        if vocab_file is None:
+            vocab_file = "rinna/japanese-roberta-base"
+        self.tokenizer = T5Tokenizer.from_pretrained(vocab_file)
+        self.eod_id = self.tokenizer.eos_token_id
+        self.pad_id = self.tokenizer.pad_token_id
+
+    @property
+    def vocab_size(self):
+        return len(self.tokenizer)
+
+    @property
+    def vocab(self):
+        return self.tokenizer.get_vocab()
+
+    @property
+    def inv_vocab(self):
+        return self.tokenizer._tokenizer.decoder
+
+    def tokenize(self, text: str):
+        return self.tokenizer.encode(text)
+
+    def tokenize_batch(self, text_batch: Union[List[str], str]):
+        if isinstance(text_batch, str):
+            text_batch = [text_batch]
+        return [self.tokenize(t) for t in text_batch]
+
+    def detokenize(self, token_ids):
+        return self.tokenizer.decode(token_ids)
+
+    @property
+    def eod(self):
+        return self.eod_id
 
 class CharLevelTokenizer(AbstractTokenizer):
     """Character Level Tokenizer"""
