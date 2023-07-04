@@ -310,7 +310,7 @@ class HFGPT2Tokenizer(AbstractTokenizer):
         return self.eod_id
 
 class HFT5Tokenizer(AbstractTokenizer):
-    """Designed to Integrate the pretrained OpenAI GPT2 Tokenizers from HF"""
+    """Designed to Integrate the pretrained riinna T5 Tokenizers from HF"""
 
     def __init__(self, vocab_file=None, fast=True):
         name = "HFT5Tokenizer"
