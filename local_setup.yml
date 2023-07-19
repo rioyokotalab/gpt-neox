@@ -1,0 +1,46 @@
+# Suggested data paths when using GPT-NeoX locally
+{
+  # or for weighted datasets:
+  # mc4 74B
+  # oscar 18B
+  # cc100 5.5B
+  # ja-wiki 1.4B
+  # auzora 0.14B
+  "train-data-paths": ["/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/mc4_text_document",
+                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/oscar-2023_text_document",
+                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/cc100_text_document",
+                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/ja_wiki_text_document",
+                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/auzora_text_document"],
+  "test-data-paths": ["/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/mc4_text_document", 
+                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/oscar-2023_text_document",
+                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/cc100_text_document",
+                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/ja_wiki_text_document",
+                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/auzora_text_document"],
+  "valid-data-paths": ["/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/mc4_text_document", 
+                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/oscar-2023_text_document",
+                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/cc100_text_document",
+                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/ja_wiki_text_document",
+                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/auzora_text_document"],
+  "train-data-weights": [1., 1., 1., 2., 4.],
+  "test-data-weights": [1., 1., 1., 1., 1.],
+  "valid-data-weights": [1., 1., 1., 1., 1.],
+
+  # If weight_by_num_documents is True, Builds dataset weights from a multinomial distribution over groups of data according to the number of documents in each group.
+  # WARNING: setting this to True will override any user provided weights
+  # "weight_by_num_documents": false,
+  # "weighted_sampler_alpha": 0.3,
+
+  # "vocab_file": "data/gpt2-vocab.json",
+  # "merge_file": "data/gpt2-merges.txt",
+
+  "save": "checkpoints",
+  "load": "checkpoints",
+  "checkpoint_validation_with_forward_pass": False,
+
+  "tensorboard_dir": "tensorboard",
+  "log_dir": "logs",
+  "use_wandb": True,
+  "wandb_host": "https://api.wandb.ai",
+  "wandb_project": "neox"
+}
+
