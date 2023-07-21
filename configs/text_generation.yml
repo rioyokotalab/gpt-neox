@@ -13,7 +13,7 @@
   "recompute": false,
 
   # `unconditional`: samples
-  "num_samples": 10,
+  "num_samples": 1000,
 
   # input/output file
   "sample_input_file": "sample_input.txt",
