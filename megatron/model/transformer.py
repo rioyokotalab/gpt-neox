@@ -525,34 +525,48 @@ class ParallelSelfAttention(nn.Module):
             )
 
             if not self.training:
-
-                # [sq, b, np, hn] -> [b * sq, np, hn]
-                query_layer = query_layer.transpose(0, 1).reshape(
-                    output_size[0] * output_size[2], output_size[1], -1
-                )
-
-                # Combined k/v into [b * sk, 2, np, hn].
-                kv = torch.cat([key_layer, value_layer], dim=1)
-
-                output = self.flash_kv_fn(
-                    query_layer,
-                    kv,
-                    cu_seqlens_q,
-                    cu_seqlens_k,
-                    max_seqlen_q,
-                    max_seqlen_k,
-                    self.dropout_p if self.training else 0.0,
-                    softmax_scale=None,
-                    causal=True,
-                )
-
-            else:
-
+                is_causal = max_seqlen_q == max_seqlen_k
+                # print("eval")
+                # print("query_layer.shape", query_layer.shape)
                 # [sq, b, np, hn] -> [b * sq, np, hn]
                 query_layer = query_layer.transpose(0, 1).reshape(
                     output_size[0], output_size[2], output_size[1], -1
                 )
 
+                # print("query_layer.shape after", query_layer.shape)
+
+                # Combined k/v into [b * sk, 2, np, hn].
+                kv = torch.cat([key_layer, value_layer], dim=1)
+
+                # output = self.flash_kv_fn(
+                #     query_layer,
+                #     kv,
+                #     cu_seqlens_q,
+                #     cu_seqlens_k,
+                #     max_seqlen_q,
+                #     max_seqlen_k,
+                #     self.dropout_p if self.training else 0.0,
+                #     softmax_scale=None,
+                #     causal=True,
+                # )
+
+                output = self.flash_qkv_fn(
+                    query_layer, key_layer, value_layer,
+                    #cu_seqlens_q,
+                    #max_seqlen_q,
+                    self.dropout_p if self.training else 0.0,
+                    softmax_scale=None,
+                    causal=is_causal,
+                )
+
+            else:
+                # print("train")
+                # print("query_layer.shape", query_layer.shape)
+                # [sq, b, np, hn] -> [b * sq, np, hn]
+                query_layer = query_layer.transpose(0, 1).reshape(
+                    output_size[0], output_size[2], output_size[1], -1
+                )
+                # print("query_layer.shape after", query_layer.shape)
                 # Combined q/k/v into [b * s, 3, np, hn].
                 # qkv = torch.cat([query_layer, key_layer, value_layer], dim=1)
 
