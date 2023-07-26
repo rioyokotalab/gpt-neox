@@ -73,7 +73,7 @@
   "distributed_backend": "nccl",
   "lr_decay_style": "cosine",
   "warmup": 0.01,
-  "checkpoint_factor": 1000,
+  "checkpoint_factor": 5000,
   # "extra_save_iters": [0,1,2,4,8,16,32,64,128,256,512],
   "eval_interval": 3000,
   "eval_iters": 10,
