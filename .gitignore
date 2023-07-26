@@ -150,3 +150,25 @@ test_logs/
 logs/
 tensorboard/
 src/
+
+
+# Ignore .err and .out files
+*.err
+*.out
+
+# Ignore specific directories
+20B_checkpoints/
+T5Tokenizer/
+aaaa/
+apex/
+checkpoints-test/
+data/
+errors/
+flash-attention/
+hf_model/
+ja_llama_410m-v1/
+ja_llama_410m/
+log
+outputs/
+sample_output.txt
+
