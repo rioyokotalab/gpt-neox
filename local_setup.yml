@@ -6,24 +6,40 @@
   # cc100 5.5B
   # ja-wiki 1.4B
   # auzora 0.14B
-  "train-data-paths": ["/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/mc4_text_document",
-                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/oscar-2023_text_document",
+
+  # "train-data-paths": [/mnt/nfs/Users/tn/llm-jp-corpus_preprocessed/ja_cc/ja_cc_text_document],
+  "train-data-paths": [/mnt/nfs/Users/tn/llm-jp-corpus_preprocessed/ja_cc-v1-cc100_ja40K_en10K/ja_cc_text_document],
+
+  # "test-data-paths": [/mnt/nfs/Users/tn/llm-jp-corpus_preprocessed/mc4_text_document],
+  # "valid-data-paths": [/mnt/nfs/Users/tn/llm-jp-corpus_preprocessed/mc4_text_document],
+
+  
+  # "train-data-paths": ["/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/mc4_text_document",
+  #                      "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/oscar-2023_text_document",
+  #                      "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/cc100_text_document",
+  #                      "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/ja_wiki_text_document",
+  #                      "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/auzora_text_document"],
+  "test-data-paths": ["/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/oscar-2023_text_document",
                        "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/cc100_text_document",
                        "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/ja_wiki_text_document",
                        "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/auzora_text_document"],
-  "test-data-paths": ["/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/mc4_text_document", 
-                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/oscar-2023_text_document",
+  "valid-data-paths": ["/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/oscar-2023_text_document",
                        "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/cc100_text_document",
                        "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/ja_wiki_text_document",
                        "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/auzora_text_document"],
-  "valid-data-paths": ["/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/mc4_text_document", 
-                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/oscar-2023_text_document",
-                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/cc100_text_document",
-                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/ja_wiki_text_document",
-                       "/mnt/nfs/Users/lfsm/ja_corpus_preprocessed/auzora_text_document"],
-  "train-data-weights": [1., 1., 1., 2., 4.],
-  "test-data-weights": [1., 1., 1., 1., 1.],
-  "valid-data-weights": [1., 1., 1., 1., 1.],
+  # "test-data-paths": ["/mnt/nfs/Users/tn/llm-jp-corpus_preprocessed/ja_cc-v1-cc100_ja40K_en10K/oscar-2023_text_document",
+  #                     "/mnt/nfs/Users/tn/llm-jp-corpus_preprocessed/ja_cc-v1-cc100_ja40K_en10K/cc100_text_document",
+  #                     "/mnt/nfs/Users/tn/llm-jp-corpus_preprocessed/ja_cc-v1-cc100_ja40K_en10Kd/ja_wiki_text_document",
+  #                     "/mnt/nfs/Users/tn/llm-jp-corpus_preprocessed/ja_cc-v1-cc100_ja40K_en10K/auzora_text_document"],    
+  # "valid-data-paths": ["/mnt/nfs/Users/tn/llm-jp-corpus_preprocessed/ja_cc-v1-cc100_ja40K_en10K/oscar-2023_text_document",
+  #                      "/mnt/nfs/Users/tn/llm-jp-corpus_preprocessed/ja_cc-v1-cc100_ja40K_en10K/cc100_text_document",
+  #                      "/mnt/nfs/Users/tn/llm-jp-corpus_preprocessed/ja_cc-v1-cc100_ja40K_en10K/ja_wiki_text_document",
+  #                      "/mnt/nfs/Users/tn/llm-jp-corpus_preprocessed/ja_cc-v1-cc100_ja40K_en10K/auzora_text_document"],
+
+
+  # "train-data-weights": [1., 1., 1., 2., 4.],
+  "test-data-weights": [1., 1., 1., 1.],
+  "valid-data-weights": [1., 1., 1., 1.],
 
   # If weight_by_num_documents is True, Builds dataset weights from a multinomial distribution over groups of data according to the number of documents in each group.
   # WARNING: setting this to True will override any user provided weights
@@ -33,8 +49,8 @@
   # "vocab_file": "data/gpt2-vocab.json",
   # "merge_file": "data/gpt2-merges.txt",
 
-  "save": "checkpoints",
-  "load": "checkpoints",
+  "save": "checkpoints-llm-jp-ja_cc-v1-cc100_ja40K_en10K",
+  "load": "checkpoints-llm-jp-ja_cc-v1-cc100_ja40K_en10K",
   "checkpoint_validation_with_forward_pass": False,
 
   "tensorboard_dir": "tensorboard",
