@@ -21,7 +21,7 @@ from abc import ABC
 from abc import abstractmethod
 
 from tokenizers import Tokenizer
-from transformers import GPT2Tokenizer, GPT2TokenizerFast, T5Tokenizer
+from transformers import GPT2Tokenizer, GPT2TokenizerFast, T5Tokenizer, LlamaTokenizer
 import numpy as np
 import sentencepiece as spm
 from typing import List, Union
@@ -44,6 +44,9 @@ def build_tokenizer(args):
     elif args.tokenizer_type.lower() == "HFTokenizer".lower():
         assert args.vocab_file is not None
         tokenizer = HFTokenizer(args.vocab_file)
+    elif args.tokenizer_type.lower() == "HFTokenizer".lower():
+        assert args.vocab_file is not None
+        tokenizer = HFLlamaTokenizer(args.vocab_file)
     elif args.tokenizer_type.lower() == "HFGPT2Tokenizer".lower():
         if args.vocab_file is None:
             print(
@@ -197,6 +200,7 @@ class SentencePieceTokenizer(AbstractTokenizer):
 
         self.tokenizer = spm.SentencePieceProcessor(model_file=vocab_file)
         self.eod_id = self.tokenizer.piece_to_id("<|endoftext|>")
+        self._initalize()
 
     @property
     def vocab_size(self):
@@ -347,6 +351,61 @@ class HFT5Tokenizer(AbstractTokenizer):
     @property
     def eod(self):
         return self.eod_id
+
+class HFChessLlamaTokenizer(AbstractTokenizer):
+    """Designed to Integrate the pretrained Llama2 Tokenizers from HF and Add more chess tokens"""
+    
+    def __init__(self, vocab_file=None):
+        name = "HFLlamaTokenizer"
+        super().__init__(name)
+        self.tokenizer = LlamaTokenizer.from_pretrained(vocab_file)
+        self.eod_id = self.tokenizer.eos_token_id
+        self.tokenizer.add_special_tokens({"pad_token":"<pad>"})
+        self.pad_id = self.tokenzier.pad_token_id
+        self.add_chess_tokens()
+
+    def add_chess_tokens(self):
+        """add all possable moves of chess game"""
+        positions=[]
+        for i in {'a','b','c','d','e','f','g','h'}:
+            for j in {1,2,3,4,5,6,7,8}:
+                positions.append(i+str(j))
+        for pos_i in positions:
+            for pos_j in positions:
+                if pos_i != pos_j:
+                    chess_token=pos_i+pos_j
+                    self.tokenizer.add_tokens(chess_token) 
+
+    @property
+    def vocab_size(self):
+        return len(self.tokenizer)
+
+    @property
+    def vocab(self):
+        return self.tokenizer.get_vocab()
+
+    @property
+    def inv_vocab(self):
+        return self.tokenizer._tokenizer.decoder
+
+    def tokenize(self, text: str):
+        return self.tokenizer.encode(text)
+
+    def tokenize_batch(self, text_batch: Union[List[str], str]):
+        if isinstance(text_batch, str):
+            text_batch = [text_batch]
+        return [self.tokenize(t) for t in text_batch]
+
+    def detokenize(self, token_ids):
+        return self.tokenizer.decode(token_ids)
+
+    @property
+    def eod(self):
+        return self.eod_id
+    
+    @property
+    def pad(self):
+        return self.pad_id
 
 class CharLevelTokenizer(AbstractTokenizer):
     """Character Level Tokenizer"""
